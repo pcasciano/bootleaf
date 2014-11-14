@@ -1,14 +1,15 @@
+var s = window.location.search.slice(1);
+var qs={};
 var map;
 
 
-var s = window.location.search.slice(1);
-var qs={};
 s.split('&').forEach(function(item) {
     var parts = item.split('=');
     qs[parts[0].trim()] = parts[1].trim();
 });
 
-console.log(qs);
+
+
 /*
 var southWest=L.latLng(qs.miny, qs.minx);
 var northEast=(qs.maxy, qs.maxx);
@@ -140,7 +141,8 @@ function getFeatureInfoUrl(map, layer, latlng, params) {
         width: size.x,
         layers: layer.options.layers,
         query_layers: layer.options.layers,
-        info_format: 'text/html'
+        info_format: 'text/html',
+	buffer: 20
     };
 
     params = L.Util.extend(defaultParams, params || {});
@@ -150,6 +152,38 @@ function getFeatureInfoUrl(map, layer, latlng, params) {
 
     return layer._url + L.Util.getParamString(params, layer._url, true);
 
+};
+
+
+function getLegend(map, layer){  
+  var defaultParams = {
+        request: 'GetLegendGraphic' ,
+        service: 'WMS',   
+	layer: layer.options.layers,
+	version: layer._wmsVersion,
+	format: 'image/png',
+	width:60,
+	height: 60,	
+  }
+  return layer._url + L.Util.getParamString(defaultParams, layer._url, true);
 }
 
 
+$(document).ready(function(){
+  $(".navbar-brand").text(qs.layer);
+});
+
+
+$("#full-extent-btn").click(function() {
+  map.fitBounds(layer.getBounds());
+  $(".navbar-collapse.in").collapse("hide");
+  return false;
+});
+
+$("#legend-btn").click(function() {
+  var url = getLegend(map, layer);
+  $("#legendModal .modal-body").html('<img src="'+url+'" />');
+  $("#legendModal").modal("show");
+  $(".navbar-collapse.in").collapse("hide");
+  return false;
+});

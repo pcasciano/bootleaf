@@ -3,9 +3,9 @@ html, body, #container {
   width: 100%;
   overflow: hidden;
 }
-/*body {
+body {
   padding-top: 50px;
-}*/
+}
 input[type="radio"], input[type="checkbox"] {
   margin: 0;
 }
@@ -17,6 +17,9 @@ input[type="radio"], input[type="checkbox"] {
   -webkit-transition: all 0.25s ease-out;
     -moz-transition: all 0.25s ease-out;
     transition: all 0.25s ease-out;
+}
+.navbar-brand:first-letter {
+    text-transform:capitalize;
 }
 #map {
   width: auto;
